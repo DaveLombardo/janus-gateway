@@ -1512,14 +1512,8 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			janus_mutex_init(&newvideoroom->participants_mutex);
       newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
 			//
-      JANUS_LOG(LOG_VERB, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (%s, %s, %s/%s codecs, secret: %s, pin: %s)\n",
-                      newvideoroom->room_id, newvideoroom->room_name,
-                      newvideoroom->is_private ? "private" : "public",
-                      janus_videoroom_audiocodec_name(newvideoroom->acodec),
-                      janus_videoroom_videocodec_name(newvideoroom->vcodec),
-                      newvideoroom->room_secret ? newvideoroom->room_secret : "no secret",
-											newvideoroom->room_pin ? newvideoroom->room_pin : "no pin");
-
+      JANUS_LOG(LOG_VERB, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (%lu, %s)\n",
+                      newvideoroom->room_id, newvideoroom->room_name);
 			// Save
 			g_hash_table_insert(rooms, janus_uint64_dup(newvideoroom->room_id), newvideoroom);
 		}
