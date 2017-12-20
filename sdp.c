@@ -788,16 +788,16 @@ int janus_sdp_parse_ssrc(void *ice_stream, const char *ssrc_attr, int video) {
 	if(ssrc == 0 || ssrc > G_MAXUINT32)
 		return -3;
 	if(video) {
-		if(stream->video_ssrc_peer[0] == 0) {
+		if(stream->video_ssrc_peer_new[0] == 0) {
 			stream->video_ssrc_peer_new[0] = ssrc;
 			JANUS_LOG(LOG_VERB, "[%"SCNu64"] Peer video SSRC: %"SCNu32"\n", handle->handle_id, stream->video_ssrc_peer_new[0]);
 		} else {
 			/* We already have a video SSRC: check if RID is involved, and we'll keep track of this for simulcasting */
 			if(stream->rid[0]) {
-				if(stream->video_ssrc_peer[1] == 0) {
+				if(stream->video_ssrc_peer_new[1] == 0) {
 					stream->video_ssrc_peer_new[1] = ssrc;
 					JANUS_LOG(LOG_VERB, "[%"SCNu64"] Peer video SSRC (sim-1): %"SCNu32"\n", handle->handle_id, stream->video_ssrc_peer_new[1]);
-				} else if(stream->video_ssrc_peer[2] == 0) {
+				} else if(stream->video_ssrc_peer_new[2] == 0) {
 					stream->video_ssrc_peer_new[2] = ssrc;
 					JANUS_LOG(LOG_VERB, "[%"SCNu64"] Peer video SSRC (sim-2): %"SCNu32"\n", handle->handle_id, stream->video_ssrc_peer_new[2]);
 				} else {
@@ -965,7 +965,9 @@ char *janus_sdp_merge(void *ice_handle, janus_sdp *anon, gboolean offer) {
 	/* Iterate on available media */
 	int audio = 0;
 	int video = 0;
+#ifdef HAVE_SCTP
 	int data = 0;
+#endif
 	GList *temp = anon->m_lines;
 	while(temp) {
 		janus_sdp_mline *m = (janus_sdp_mline *)temp->data;
