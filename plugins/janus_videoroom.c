@@ -1469,6 +1469,8 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 	g_string_free(dialog_id_string, TRUE);
 	//
 
+	JANUS_LOG(LOG_WARN, "janus_videoroom_access_room, is_join: %d\n", is_join ? "yes" : "no");
+
 	if(is_join){
 		// create room on first join
 
@@ -1512,7 +1514,7 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			janus_mutex_init(&newvideoroom->participants_mutex);
       newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
 			//
-      JANUS_LOG(LOG_WARN, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (%lu, %s)\n",
+      JANUS_LOG(LOG_WARN, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (dialog_id: %s)\n",
                       newvideoroom->room_id, newvideoroom->room_name);
 			// Save
 			g_hash_table_insert(rooms, janus_uint64_dup(newvideoroom->room_id), newvideoroom);
