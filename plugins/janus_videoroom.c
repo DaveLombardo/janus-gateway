@@ -1469,7 +1469,7 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 	g_string_free(dialog_id_string, TRUE);
 	//
 
-	JANUS_LOG(LOG_WARN, "janus_videoroom_access_room, is_join: %d\n", is_join ? "yes" : "no");
+	JANUS_LOG(LOG_WARN, "janus_videoroom_access_room, is_join: %s\n", is_join ? "yes" : "no");
 
 	if(is_join){
 		// create room on first join
