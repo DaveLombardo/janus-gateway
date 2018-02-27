@@ -1399,17 +1399,6 @@ static void janus_videoroom_leave_or_unpublish(janus_videoroom_participant *part
 		if(is_leaving) {
 			g_hash_table_remove(participant->room->participants, &participant->user_id);
 			g_hash_table_remove(participant->room->private_ids, GUINT_TO_POINTER(participant->pvt_id));
-
-			// destroy room if participants count is 0
-			janus_mutex_lock(&rooms_mutex);
-			guint participants_size = g_hash_table_size(participant->room->participants);
-			if(participants_size == 0){
-                // Remove room lazily
-                participant->room->destroyed = janus_get_monotonic_time();
-                old_rooms = g_list_append(old_rooms, participant->room);
-			}
-			janus_mutex_unlock(&rooms_mutex);
-			//
 		}
 		janus_mutex_unlock(&participant->room->participants_mutex);
 		json_decref(event);
