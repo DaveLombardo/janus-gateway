@@ -17,7 +17,7 @@
  * a single feed, which means that if you want to watch more feeds at the
  * same time, you'll need to create multiple 'listeners' to attach at any
  * of them.
- * 
+ *
  * Considering that this plugin allows for several different WebRTC PeerConnections
  * to be on at the same time for the same peer (specifically, each peer
  * potentially has 1 PeerConnection on for publishing and N on for subscriptions
@@ -1404,13 +1404,12 @@ static void janus_videoroom_leave_or_unpublish(janus_videoroom_participant *part
 			janus_mutex_lock(&rooms_mutex);
 			guint participants_size = g_hash_table_size(participant->room->participants);
 			if(participants_size == 0){
-        // Remove room lazily
-        participant->room->destroyed = janus_get_monotonic_time();
-        old_rooms = g_list_append(old_rooms, participant->room);
+                // Remove room lazily
+                participant->room->destroyed = janus_get_monotonic_time();
+                old_rooms = g_list_append(old_rooms, participant->room);
 			}
 			janus_mutex_unlock(&rooms_mutex);
 			//
-
 		}
 		janus_mutex_unlock(&participant->room->participants_mutex);
 		json_decref(event);
@@ -1574,8 +1573,8 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 
 	json_t *room = json_object_get(root, "room");
 	json_t *id = json_object_get(root, "id");
-  guint64 user_id = json_integer_value(id);
-  gchar *room_id_string = json_string_value(room);
+    guint64 user_id = json_integer_value(id);
+    gchar *room_id_string = json_string_value(room);
 
 	// generate room id from qb chat dialog id
 	GString *dialog_id_string = g_string_new(room_id_string);
@@ -1615,24 +1614,24 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			newvideoroom->vcodec[1] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->vcodec[2] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->audiolevel_ext = TRUE;
-		  newvideoroom->videoorient_ext = TRUE;
+            newvideoroom->videoorient_ext = TRUE;
 			newvideoroom->playoutdelay_ext = TRUE;
-      newvideoroom->destroyed = 0;
+            newvideoroom->destroyed = 0;
 
 			// temp feature: enable recording for room with specific name
-      //
-      if(!strcasecmp(room_id_string, "535353530000000000111111")) {
-      	newvideoroom->record = TRUE;
-        newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec/535353530000000000111111");
-			}
+            //
+            if(!strcasecmp(room_id_string, "535353530000000000111111")) {
+                newvideoroom->record = TRUE;
+                newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec/535353530000000000111111");
+            }
 
-			janus_mutex_init(&newvideoroom->participants_mutex);
-      newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
-			//
-      JANUS_LOG(LOG_WARN, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (dialog_id: %s)\n",
-                      newvideoroom->room_id, newvideoroom->room_name);
-			// Save
-			g_hash_table_insert(rooms, janus_uint64_dup(newvideoroom->room_id), newvideoroom);
+            janus_mutex_init(&newvideoroom->participants_mutex);
+            newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
+            
+            JANUS_LOG(LOG_WARN, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (dialog_id: %s)\n",
+                          newvideoroom->room_id, newvideoroom->room_name);
+            // Save
+            g_hash_table_insert(rooms, janus_uint64_dup(newvideoroom->room_id), newvideoroom);
 		}
 	}
 
