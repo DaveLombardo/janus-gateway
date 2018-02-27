@@ -12,22 +12,12 @@
  * different scenarios, ranging from a simple webinar (one speaker, several
  * listeners) to a fully meshed video conference (each peer sending and
  * receiving to and from all the others).
- *
- * For what concerns the subscriber side, there are two different ways to
- * attach to a publisher's feed: a generic 'listener', which can attach to
- * a single feed, and a more complex 'Multiplexed listener', which instead can
- * attach to more feeds using the same PeerConnection. The generic 'listener'
- * is the default, which means that if you want to watch more feeds at the
+ * 
+ * For what concerns the subscriber side, there's a generic 'listener', which can attach to
+ * a single feed, which means that if you want to watch more feeds at the
  * same time, you'll need to create multiple 'listeners' to attach at any
- * of them. The 'Multiplexed listener', instead, is a more complex alternative
- * that exploits the so called RTCWEB 'Plan B', which multiplexes more
- * streams on a single PeerConnection and in the SDP: while more efficient in terms of
- * resources, though, this approach is experimental, and currently only
- * available on Google Chrome, so use it wisely.
- * \note As of now, work on Plan B is still going on, and as such its support in Janus
- * is flaky to say the least. Don't try to attach as a Multiplexed listener or bad
- * things will probably happen!
- *
+ * of them.
+ * 
  * Considering that this plugin allows for several different WebRTC PeerConnections
  * to be on at the same time for the same peer (specifically, each peer
  * potentially has 1 PeerConnection on for publishing and N on for subscriptions
@@ -622,6 +612,7 @@ struct janus_videoroom_srtp_context {
 typedef struct janus_videoroom_participant {
 	janus_videoroom_session *session;
 	janus_videoroom *room;	/* Room */
+	guint64 room_id;	/* Unique room ID */
 	guint64 user_id;	/* Unique ID in the room */
 	guint32 pvt_id;		/* This is sent to the publisher for mapping purposes, but shouldn't be shared with others */
 	gchar *display;		/* Display name (just for fun) */
@@ -1390,6 +1381,13 @@ static void janus_videoroom_participant_joining(janus_videoroom_participant *p) 
 
 static void janus_videoroom_leave_or_unpublish(janus_videoroom_participant *participant, gboolean is_leaving, gboolean kicked) {
 	/* we need to check if the room still exists, may have been destroyed already */
+	janus_mutex_lock(&rooms_mutex);
+	if (participant->room_id && !g_hash_table_lookup(rooms, &participant->room_id)) {
+		JANUS_LOG(LOG_ERR, "No such room (%"SCNu64")\n", participant->room_id);
+		janus_mutex_unlock(&rooms_mutex);
+		return;
+	}
+	janus_mutex_unlock(&rooms_mutex);
 	if(participant->room && !participant->room->destroyed) {
 		json_t *event = json_object();
 		json_object_set_new(event, "videoroom", json_string("event"));
@@ -3815,6 +3813,7 @@ static void *janus_videoroom_handler(void *data) {
 				}
 				janus_videoroom_participant *publisher = g_malloc0(sizeof(janus_videoroom_participant));
 				publisher->session = session;
+				publisher->room_id = videoroom->room_id;
 				publisher->room = videoroom;
 				publisher->user_id = user_id;
 				publisher->display = display_text ? g_strdup(display_text) : NULL;
