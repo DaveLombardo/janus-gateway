@@ -3494,8 +3494,8 @@ static void janus_videoroom_recorder_create(janus_videoroom_participant *partici
 			}
 		} else {
 			/* Build a filename */
-			g_snprintf(filename, 255, "videoroom-%"SCNu64"-user-%"SCNu64"-%"SCNi64"-audio",
-				participant->room->room_id, participant->user_id, now);
+			g_snprintf(filename, 255, "videoroom-%s-user-%"SCNu64"-%"SCNi64"-audio",
+				participant->room->room_name, participant->user_id, now);
 			participant->arc = janus_recorder_create(participant->room->rec_dir,
 				janus_videoroom_audiocodec_name(participant->acodec), filename);
 			if(participant->arc == NULL) {
@@ -3515,8 +3515,8 @@ static void janus_videoroom_recorder_create(janus_videoroom_participant *partici
 			}
 		} else {
 			/* Build a filename */
-			g_snprintf(filename, 255, "videoroom-%"SCNu64"-user-%"SCNu64"-%"SCNi64"-video",
-				participant->room->room_id, participant->user_id, now);
+			g_snprintf(filename, 255, "videoroom-%s-user-%"SCNu64"-%"SCNi64"-video",
+				participant->room->room_name, participant->user_id, now);
 			participant->vrc = janus_recorder_create(participant->room->rec_dir,
 				janus_videoroom_videocodec_name(participant->vcodec), filename);
 			if(participant->vrc == NULL) {
