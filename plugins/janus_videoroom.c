@@ -1609,9 +1609,9 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 
 			// temp feature: enable recording for room with specific name
             //
-            if(!strcasecmp(room_id_string, "535353530000000000111111")) {
+            if(!strcasecmp(room_id_string, "5ab234c01cc0c00e62c96960")) {
                 newvideoroom->record = TRUE;
-                newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec/535353530000000000111111");
+                newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec/5ab234c01cc0c00e62c96960");
             }
 
             janus_mutex_init(&newvideoroom->participants_mutex);
