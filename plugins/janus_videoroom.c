@@ -1592,7 +1592,7 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			newvideoroom->room_name = description;
 			newvideoroom->is_private = TRUE;
 			newvideoroom->max_publishers = 12;	// FIXME How should we choose a default?
-			newvideoroom->bitrate = 128000; // FIXME How should we choose a default?
+			newvideoroom->bitrate = 2048000; // FIXME How should we choose a default?
 			newvideoroom->fir_freq = 10; // FIXME How should we choose a default?
 			/* By default, we force OPUS as the only audio codec */
 			newvideoroom->acodec[0] = JANUS_VIDEOROOM_OPUS;
