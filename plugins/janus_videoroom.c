@@ -12,7 +12,7 @@
  * different scenarios, ranging from a simple webinar (one speaker, several
  * listeners) to a fully meshed video conference (each peer sending and
  * receiving to and from all the others).
- * 
+ *
  * For what concerns the subscriber side, there's a generic 'listener', which can attach to
  * a single feed, which means that if you want to watch more feeds at the
  * same time, you'll need to create multiple 'listeners' to attach at any
@@ -1327,7 +1327,7 @@ void janus_videoroom_create_session(janus_plugin_session *handle, int *error) {
 	if(g_atomic_int_get(&stopping) || !g_atomic_int_get(&initialized)) {
 		*error = -1;
 		return;
-	}	
+	}
 	janus_videoroom_session *session = g_malloc0(sizeof(janus_videoroom_session));
 	session->handle = handle;
 	session->participant_type = janus_videoroom_p_type_none;
@@ -1616,7 +1616,7 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 
             janus_mutex_init(&newvideoroom->participants_mutex);
             newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
-            
+
             JANUS_LOG(LOG_WARN, "janus_videoroom_access_room: Created videoroom: %"SCNu64" (dialog_id: %s)\n",
                           newvideoroom->room_id, newvideoroom->room_name);
             // Save
@@ -3291,7 +3291,7 @@ void janus_videoroom_incoming_rtp(janus_plugin_session *handle, int video, char 
 				/* 5 seconds have passed since the last REMB, send a new one */
 				send_remb = TRUE;
 			}
-			
+
 			if(send_remb && participant->bitrate) {
 				/* We send a few incremental REMB messages at startup */
 				uint32_t bitrate = participant->bitrate;
@@ -4519,7 +4519,10 @@ static void *janus_videoroom_handler(void *data) {
 				json_object_set_new(event, "videoroom", json_string("event"));
 				json_object_set_new(event, "room", json_integer(listener->room->room_id));
 				json_object_set_new(event, "configured", json_string("ok"));
-				json_object_set_new(event, "id", json_integer(listener->feed->user_id));
+				janus_videoroom_participant *listener_feed = listener->feed;
+				if(listener_feed != NULL) {
+				  json_object_set_new(event, "id", json_integer(listener_feed->user_id));
+			  }
 				/* The user may be interested in an ICE restart */
 				gboolean do_restart = restart ? json_is_true(restart) : FALSE;
 				gboolean do_update = update ? json_is_true(update) : FALSE;
@@ -4888,7 +4891,7 @@ static void *janus_videoroom_handler(void *data) {
 									playout_delay_extmap = TRUE;
 									playout_delay_mdir = a->direction;
 								}
-								
+
 							}
 							ma = ma->next;
 						}
