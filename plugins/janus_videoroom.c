@@ -4528,7 +4528,7 @@ static void *janus_videoroom_handler(void *data) {
 				gboolean do_update = update ? json_is_true(update) : FALSE;
 				if(sdp_update || do_restart || do_update) {
 					/* Negotiate by sending the selected publisher SDP back, and/or force an ICE restart */
-					if(publisher->sdp != NULL) {
+					if(publisher && publisher->sdp != NULL) {
 						char temp_error[512];
 						JANUS_LOG(LOG_VERB, "Munging SDP offer (update) to adapt it to the listener's requirements\n");
 						janus_sdp *offer = janus_sdp_parse(publisher->sdp, temp_error, sizeof(temp_error));
