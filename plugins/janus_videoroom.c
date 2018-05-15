@@ -1562,8 +1562,8 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 
 	json_t *room = json_object_get(root, "room");
 	json_t *id = json_object_get(root, "id");
-    guint64 user_id = json_integer_value(id);
-    gchar *room_id_string = json_string_value(room);
+        guint64 user_id = json_integer_value(id);
+        gchar *room_id_string = json_string_value(room);
 
 	// generate room id from qb chat dialog id
 	GString *dialog_id_string = g_string_new(room_id_string);
@@ -1603,16 +1603,16 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			newvideoroom->vcodec[1] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->vcodec[2] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->audiolevel_ext = TRUE;
-            newvideoroom->videoorient_ext = TRUE;
+                        newvideoroom->videoorient_ext = TRUE;
 			newvideoroom->playoutdelay_ext = TRUE;
-            newvideoroom->destroyed = 0;
+                        newvideoroom->destroyed = 0;
 
 			// temp feature: enable recording for room with specific name
             //
-            if(!strcasecmp(room_id_string, "5ab234c01cc0c00e62c96960")) {
+            if(!strcasecmp(room_id_string, "5ab234c01cc0c00e62c96960") || !strcasecmp(room_id_string, "5afa823c12685f101adaf628") || !strcasecmp(room_id_string, "5afa825512685f101adaf62a")) {
                 newvideoroom->record = TRUE;
-                newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec/5ab234c01cc0c00e62c96960");
-            }
+                newvideoroom->rec_dir = g_strdup("/tmp/janus-videoroom/rec");
+            } 
 
             janus_mutex_init(&newvideoroom->participants_mutex);
             newvideoroom->participants = g_hash_table_new_full(g_int64_hash, g_int64_equal, (GDestroyNotify)g_free, NULL);
