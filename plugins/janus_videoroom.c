@@ -1599,8 +1599,8 @@ static int janus_videoroom_access_room(json_t *root, gboolean check_secret, gboo
 			newvideoroom->acodec[1] = JANUS_VIDEOROOM_NOAUDIO;
 			newvideoroom->acodec[2] = JANUS_VIDEOROOM_NOAUDIO;
 			/* By default, we force VP8 as the only video codec */
-			//newvideoroom->vcodec[0] = JANUS_VIDEOROOM_VP8;
-			newvideoroom->vcodec[0] = JANUS_VIDEOROOM_H264;
+			newvideoroom->vcodec[0] = JANUS_VIDEOROOM_VP8;
+			//newvideoroom->vcodec[0] = JANUS_VIDEOROOM_H264;
 			newvideoroom->vcodec[1] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->vcodec[2] = JANUS_VIDEOROOM_NOVIDEO;
 			newvideoroom->audiolevel_ext = TRUE;
